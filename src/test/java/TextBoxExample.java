@@ -3,11 +3,14 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.JavascriptExecutor;
+
+import java.time.Duration;
 import java.util.List;
 
 public class TextBoxExample {
@@ -89,10 +92,20 @@ public class TextBoxExample {
             textEditor.sendKeys("Italic Text by Button");
             italicKey.click();
             textEditor.sendKeys(Keys.ENTER);
+            textEditor.sendKeys(Keys.chord(Keys.CONTROL, "i") + "Italic Text by Ctrl + I");
+            textEditor.sendKeys(Keys.CONTROL + "i");
+            textEditor.sendKeys(Keys.ENTER);
 
+            WebElement underlineKey = driver.findElement(By.className("ql-underline"));
+            underlineKey.click();
+            textEditor.sendKeys("Underline Text by Button");
+            underlineKey.click();
+            textEditor.sendKeys(Keys.ENTER);
+            textEditor.sendKeys(Keys.chord(Keys.CONTROL, "u") + "Underline Text by Ctrl + U");
+            textEditor.sendKeys(Keys.CONTROL + "u");
+            textEditor.sendKeys(Keys.ENTER);
 
-
-
+            System.out.println("08: Interacted with text editor.");
 
          } catch (Exception e) {
              driver.switchTo().defaultContent();
@@ -101,23 +114,26 @@ public class TextBoxExample {
 //
 //        // 09. Just Press Enter and confirm error message*
 //        try {
-//            // find an input that might require Enter (look for placeholder or label text)
-//            WebElement enterInput = null;
-//            List<WebElement> inputs = driver.findElements(By.xpath("//input"));
-//            if (!inputs.isEmpty()) enterInput = inputs.get(0);
-//            if (enterInput != null) {
-//                enterInput.sendKeys(Keys.ENTER);
-//                // wait a short time and try to find an error message
-//                Thread.sleep(500);
-//                List<WebElement> msgs = driver.findElements(By.cssSelector(".ui-message, .ui-messages, .error, .ui-error"));
-//                if (!msgs.isEmpty()) {
-//                    System.out.println("09: Found message after Enter: " + msgs.get(0).getText());
-//                } else {
-//                    System.out.println("09: No error message found after Enter (may not apply on this page).");
-//                }
+//            WebElement enterBox = driver.findElement(By.id("j_idt106:thisform:age"));
+//            enterBox.sendKeys(Keys.ENTER);
+//
+//            // wait for navigation / full page load
+//            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+//            wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
+//
+//            // prefer a specific error message element if present
+//            List<WebElement> errors = driver.findElements(By.xpath("//span[contains(@class,'ui-message-error')]"));
+//            String message;
+//            if (!errors.isEmpty()) {
+//                message = errors.get(0).getText();
 //            } else {
-//                System.out.println("09: No input found to press Enter on.");
+//                // fallback: read entire body text
+//                WebElement body = driver.findElement(By.tagName("body"));
+//                message = body.getText();
 //            }
+//
+//            System.out.println("09: Message found:\n" + message);
+//
 //        } catch (Exception e) {
 //            System.out.println("09: Error - " + e.getMessage());
 //        }
