@@ -138,34 +138,44 @@ public class TextBoxExample {
             System.out.println("09: Error - " + e.getMessage());
         }
 
-        // 10. Type your name and choose the third option (autocomplete)
+        // 10 Click and Confirm Label Position Changes
+
         try {
-            WebElement ac = null;
-            // try to find an autocomplete-like input
-            List<WebElement> acInputs = driver.findElements(By.cssSelector("input.ui-autocomplete-input, input[role='combobox']"));
-            if (!acInputs.isEmpty()) ac = acInputs.get(0);
-            if (ac == null) {
-                // fallback: try a text input after the email field
-                List<WebElement> allText = driver.findElements(By.xpath("//input[@type='text']"));
-                if (allText.size() > 2) ac = allText.get(2);
-            }
-            if (ac != null) {
-                ac.clear();
-                ac.sendKeys("Numesh");
-                // wait for suggestions
-                Thread.sleep(700);
-                List<WebElement> suggestions = driver.findElements(By.cssSelector("ul.ui-autocomplete-list li, ul.ui-autocomplete-items li, .ui-autocomplete-results li"));
-                if (suggestions.size() >= 3) {
-                    suggestions.get(2).click();
-                    System.out.println("10: Selected third autocomplete option.");
-                } else {
-                    System.out.println("10: Less than 3 suggestions available (found " + suggestions.size() + ").");
-                }
-            } else {
-                System.out.println("10: Autocomplete input not found.");
-            }
+         WebElement inputLabel = driver.findElement(By.xpath("//input[@id='j_idt106:float-input']"));
+         // please get the position for the inputLabel element
+            int beforeY = inputLabel.getLocation().getY();
+            int beforeX = inputLabel.getLocation().getX();
+            inputLabel.click();
+            Thread.sleep(500);
+            int afterY = inputLabel.getLocation().getY();
+            int afterX = inputLabel.getLocation().getX();
+            System.out.println("10: Label position before click: (" + beforeX + ", "
+                    + beforeY + ") after click: (" + afterX + ", " + afterY + ")");
+
         } catch (Exception e) {
             System.out.println("10: Error - " + e.getMessage());
+        }
+
+
+        try {
+            WebElement autoInput = driver.findElement(By.xpath("//input[@id='j_idt106:auto-complete_input']"));
+            autoInput.clear();
+            autoInput.sendKeys("Numesh");
+
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            wait.until(d -> d.findElements(By.cssSelector(".ui-autocomplete-item")).size() > 0);
+
+            List<WebElement> options = driver.findElements(By.cssSelector(".ui-autocomplete-item"));
+            System.out.println("11: Found " + options.size() + " autocomplete options.");
+
+            if (options.size() >= 3) {
+                options.get(2).click();
+                System.out.println("11: Typed name and selected third autocomplete option.");
+            } else {
+                System.out.println("11: Less than 3 autocomplete options found.");
+            }
+        } catch (Exception e) {
+            System.out.println("11: Error - " + e.getMessage());
         }
 //
 //        // 11. Type your DOB (mm/dd/yyyy) and confirm date chosen.
