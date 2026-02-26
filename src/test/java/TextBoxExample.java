@@ -3,6 +3,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.AfterMethod;
@@ -25,7 +26,7 @@ public class TextBoxExample {
     }
 
 //    @AfterMethod
-//    public void tearDown() {
+//    public void tearDown() {+
 //        if (driver != null) {
 //            try { driver.quit(); } catch (Exception ignored) {}
 //        }
@@ -36,30 +37,34 @@ public class TextBoxExample {
         // 01. Type the name
         WebElement typeName = driver.findElement(By.id("j_idt88:name"));
         typeName.sendKeys("Numesh Jayamanne");
+        System.out.println("01: Typed name into text box.");
 
         // 02. Append Country to the City
         WebElement appendCountry = driver.findElement(By.id("j_idt88:j_idt91"));
         appendCountry.sendKeys(" India");
+        System.out.println("02: Appended country to city.");
 
         // 03. Verify if text box is disabled
         WebElement isDisabled = driver.findElement(By.id("j_idt88:j_idt93"));
         if (isDisabled.isEnabled()) {
-            System.out.println("The box is enabled");
+            System.out.println("03. The box is enabled");
         } else {
-        System.out.println("The box is disabled"); }
+        System.out.println("03. The box is disabled"); }
 
         // 04. Clear the typed text.
         WebElement clearText = driver.findElement(By.id("j_idt88:j_idt95"));
         clearText.clear();
+        System.out.println("04: Cleared the text box.");
 
         // 05. Retrieve the typed text.
         WebElement retrieveText = driver.findElement(By.id("j_idt88:j_idt97"));
         String text = retrieveText.getAttribute("value");
-        System.out.println("The typed text is: " + text);
+        System.out.println("05. The typed text is: " + text);
 
         // 06. Type email and Tab. Confirm control moved to next element.
         WebElement typeEmail = driver.findElement(By.id("j_idt88:j_idt99"));
         typeEmail.sendKeys("numesh@gmail.com" + Keys.TAB + "Confirmed control moved to next element. "+Keys.ENTER);
+        System.out.println("06: Typed email and pressed Tab.");
 
 
         // 07. Type about yourself (textarea)
@@ -132,7 +137,7 @@ public class TextBoxExample {
                 message = body.getText();
             }
 
-            System.out.println("09: Message found:\n" + message);
+            System.out.println("09: Message found ");
 
         } catch (Exception e) {
             System.out.println("09: Error - " + e.getMessage());
@@ -156,6 +161,7 @@ public class TextBoxExample {
             System.out.println("10: Error - " + e.getMessage());
         }
 
+        // 11. Type your name and choose the third option (autocomplete)
 
         try {
             WebElement autoInput = driver.findElement(By.xpath("//input[@id='j_idt106:auto-complete_input']"));
@@ -166,43 +172,44 @@ public class TextBoxExample {
             wait.until(d -> d.findElements(By.cssSelector(".ui-autocomplete-item")).size() > 0);
 
             List<WebElement> options = driver.findElements(By.cssSelector(".ui-autocomplete-item"));
-            System.out.println("11: Found " + options.size() + " autocomplete options.");
 
             if (options.size() >= 3) {
                 options.get(2).click();
-                System.out.println("11: Typed name and selected third autocomplete option.");
+                System.out.println("11: Typed name and selected third autocomplete option. + Selected option text: " + options.get(2).getText());
             } else {
                 System.out.println("11: Less than 3 autocomplete options found.");
             }
         } catch (Exception e) {
             System.out.println("11: Error - " + e.getMessage());
         }
+
+        // 12. Type your DOB (mm/dd/yyyy) and confirm date chosen.
+
+        try {
+            WebElement showCalendar = driver.findElement(By.xpath("//button[@aria-label='Show Calendar']"));
+            showCalendar.click();
+
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            WebElement panel = wait.until(d -> d.findElement(By.xpath("//*[@id='j_idt106:j_idt116_panel']/div")));
+
+            WebElement title = panel.findElement(By.xpath(".//div[contains(@class,'ui-datepicker-title')]"));
+            WebElement prev = panel.findElement(By.xpath(".//a[contains(@class,'ui-datepicker-prev')]"));
+
+            int guard =0;
+            while (!title.getText().contains("January1989") && guard++ <300) {
+                prev.click();
+                wait.until(d -> title.isDisplayed());
+            }
+
+            panel.findElement(By.xpath(".//a[text()='4']")).click();
+            String chosen = driver.findElement(By.id("j_idt106:j_idt116_input")).getAttribute("value");
+            System.out.println("12: Entered DOB into date field: " + chosen);
+        } catch (Exception e) {
+            System.out.println("12: Error - " + e.getMessage());
+        }
+
 //
-//        // 11. Type your DOB (mm/dd/yyyy) and confirm date chosen.
-//        try {
-//            WebElement dateInput = null;
-//            List<WebElement> dates = driver.findElements(By.cssSelector("input[type='date'], input.ui-date, input.hasDatepicker, input[placeholder*='date'], input[placeholder*='DOB']"));
-//            if (!dates.isEmpty()) dateInput = dates.get(0);
-//            if (dateInput == null) {
-//                List<WebElement> textInputs = driver.findElements(By.xpath("//input[@type='text']"));
-//                for (WebElement el : textInputs) {
-//                    String id = el.getAttribute("id");
-//                    if (id != null && id.toLowerCase().contains("date")) { dateInput = el; break; }
-//                }
-//            }
-//            if (dateInput != null) {
-//                dateInput.clear();
-//                dateInput.sendKeys("01/01/1990");
-//                dateInput.sendKeys(Keys.TAB);
-//                System.out.println("11: Entered DOB into date field.");
-//            } else {
-//                System.out.println("11: Date input not found.");
-//            }
-//        } catch (Exception e) {
-//            System.out.println("11: Error - " + e.getMessage());
-//        }
-//
-//        // 12. Type number and spin to confirm value changed.
+//        // 13. Type number and spin to confirm value changed.
 //        try {
 //            WebElement num = null;
 //            List<WebElement> numbers = driver.findElements(By.cssSelector("input[type='number'], input.ui-spinner-input"));
@@ -228,7 +235,7 @@ public class TextBoxExample {
 //            System.out.println("12: Error - " + e.getMessage());
 //        }
 //
-//        // 13. Type random number (1-100) and confirm slider moves correctly.
+//        // 14. Type random number (1-100) and confirm slider moves correctly.
 //        try {
 //            WebElement slider = null;
 //            List<WebElement> sliders = driver.findElements(By.cssSelector("div.ui-slider, .ui-slider"));
@@ -244,7 +251,7 @@ public class TextBoxExample {
 //            System.out.println("13: Error - " + e.getMessage());
 //        }
 //
-//        // 14. Click and Confirm Label Position Changes
+//        // 15. Click and Confirm Label Position Changes
 //        try {
 //            // find an input with a label sibling
 //            WebElement inputWithLabel = null;
@@ -273,7 +280,7 @@ public class TextBoxExample {
 //            System.out.println("14: Error - " + e.getMessage());
 //        }
 //
-//        // 15-18. Repeat/variations of earlier behaviors (kept minimal)
+//        // 16-19. Repeat/variations of earlier behaviors (kept minimal)
 //        try {
 //            System.out.println("15: Typing name into next available text input if present.");
 //            List<WebElement> texts = driver.findElements(By.xpath("//input[@type='text']"));
@@ -297,7 +304,7 @@ public class TextBoxExample {
 //            if (!moreSliders.isEmpty()) { actions.clickAndHold(moreSliders.get(0)).moveByOffset(30,0).release().perform(); }
 //        } catch (Exception e) { System.out.println("18: Error - " + e.getMessage()); }
 //
-//        // 19. Click and Confirm Keyboard appears (best-effort: focus and check activeElement)
+//        // 20. Click and Confirm Keyboard appears (best-effort: focus and check activeElement)
 //        try {
 //            List<WebElement> inputsAll = driver.findElements(By.xpath("//input|//textarea"));
 //            if (!inputsAll.isEmpty()) {
@@ -310,7 +317,7 @@ public class TextBoxExample {
 //            }
 //        } catch (Exception e) { System.out.println("19: Error - " + e.getMessage()); }
 //
-//        // 20. Custom Toolbar (check presence)
+//        // 21. Custom Toolbar (check presence)
 //        try {
 //            List<WebElement> toolbars = driver.findElements(By.cssSelector(".ui-toolbar, .toolbar, .ql-toolbar, .editor-toolbar"));
 //            if (!toolbars.isEmpty()) {
