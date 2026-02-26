@@ -112,61 +112,61 @@ public class TextBoxExample {
              System.out.println("08: Error - " + e.getMessage());
          }
 //
-//        // 09. Just Press Enter and confirm error message*
-//        try {
-//            WebElement enterBox = driver.findElement(By.id("j_idt106:thisform:age"));
-//            enterBox.sendKeys(Keys.ENTER);
-//
-//            // wait for navigation / full page load
-//            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-//            wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-//
-//            // prefer a specific error message element if present
-//            List<WebElement> errors = driver.findElements(By.xpath("//span[contains(@class,'ui-message-error')]"));
-//            String message;
-//            if (!errors.isEmpty()) {
-//                message = errors.get(0).getText();
-//            } else {
-//                // fallback: read entire body text
-//                WebElement body = driver.findElement(By.tagName("body"));
-//                message = body.getText();
-//            }
-//
-//            System.out.println("09: Message found:\n" + message);
-//
-//        } catch (Exception e) {
-//            System.out.println("09: Error - " + e.getMessage());
-//        }
-//
-//        // 10. Type your name and choose the third option (autocomplete)
-//        try {
-//            WebElement ac = null;
-//            // try to find an autocomplete-like input
-//            List<WebElement> acInputs = driver.findElements(By.cssSelector("input.ui-autocomplete-input, input[role='combobox']"));
-//            if (!acInputs.isEmpty()) ac = acInputs.get(0);
-//            if (ac == null) {
-//                // fallback: try a text input after the email field
-//                List<WebElement> allText = driver.findElements(By.xpath("//input[@type='text']"));
-//                if (allText.size() > 2) ac = allText.get(2);
-//            }
-//            if (ac != null) {
-//                ac.clear();
-//                ac.sendKeys("Numesh");
-//                // wait for suggestions
-//                Thread.sleep(700);
-//                List<WebElement> suggestions = driver.findElements(By.cssSelector("ul.ui-autocomplete-list li, ul.ui-autocomplete-items li, .ui-autocomplete-results li"));
-//                if (suggestions.size() >= 3) {
-//                    suggestions.get(2).click();
-//                    System.out.println("10: Selected third autocomplete option.");
-//                } else {
-//                    System.out.println("10: Less than 3 suggestions available (found " + suggestions.size() + ").");
-//                }
-//            } else {
-//                System.out.println("10: Autocomplete input not found.");
-//            }
-//        } catch (Exception e) {
-//            System.out.println("10: Error - " + e.getMessage());
-//        }
+        // 09. Just Press Enter and confirm error message*
+        try {
+            WebElement enterBox = driver.findElement(By.xpath("//*[@id=\"j_idt106:thisform:age\"]"));
+            enterBox.sendKeys(Keys.ENTER);
+
+            // wait for navigation / full page load
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
+
+            // prefer a specific error message element if present
+            List<WebElement> errors = driver.findElements(By.xpath("//span[contains(@class,'ui-message-error')]"));
+            String message;
+            if (!errors.isEmpty()) {
+                message = errors.get(0).getText();
+            } else {
+                // fallback: read entire body text
+                WebElement body = driver.findElement(By.tagName("body"));
+                message = body.getText();
+            }
+
+            System.out.println("09: Message found:\n" + message);
+
+        } catch (Exception e) {
+            System.out.println("09: Error - " + e.getMessage());
+        }
+
+        // 10. Type your name and choose the third option (autocomplete)
+        try {
+            WebElement ac = null;
+            // try to find an autocomplete-like input
+            List<WebElement> acInputs = driver.findElements(By.cssSelector("input.ui-autocomplete-input, input[role='combobox']"));
+            if (!acInputs.isEmpty()) ac = acInputs.get(0);
+            if (ac == null) {
+                // fallback: try a text input after the email field
+                List<WebElement> allText = driver.findElements(By.xpath("//input[@type='text']"));
+                if (allText.size() > 2) ac = allText.get(2);
+            }
+            if (ac != null) {
+                ac.clear();
+                ac.sendKeys("Numesh");
+                // wait for suggestions
+                Thread.sleep(700);
+                List<WebElement> suggestions = driver.findElements(By.cssSelector("ul.ui-autocomplete-list li, ul.ui-autocomplete-items li, .ui-autocomplete-results li"));
+                if (suggestions.size() >= 3) {
+                    suggestions.get(2).click();
+                    System.out.println("10: Selected third autocomplete option.");
+                } else {
+                    System.out.println("10: Less than 3 suggestions available (found " + suggestions.size() + ").");
+                }
+            } else {
+                System.out.println("10: Autocomplete input not found.");
+            }
+        } catch (Exception e) {
+            System.out.println("10: Error - " + e.getMessage());
+        }
 //
 //        // 11. Type your DOB (mm/dd/yyyy) and confirm date chosen.
 //        try {
